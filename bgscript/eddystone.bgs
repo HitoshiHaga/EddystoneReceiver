@@ -1,0 +1,41 @@
+dim advdata(31)
+
+procedure init_adv_data()
+	
+	# flag type settings
+	advdata(0:3) = $060102
+	# define a service uuid
+	advdata(3:4) = $FEAA0303
+	# UID Data Length = 0x17 = 23byte
+	advdata(7:1) = $17
+	# flags of 16bit ServiceUUID Data
+	advdata(8:1) = $16
+	# ServiceUUID
+	advdata(9:2) = $FEAA
+	
+	#### Eddystone UID packets ####
+	# UID FrameType = 0x00
+	advdata(11:1) = $00
+	# txPower = 0xC6 = -54dBm
+	advdata(12:1) = $C6
+	# UID data - NID
+	advdata(13:10) = "\x45\x1d\xfa\x19\x22\xe1\x36\xca\xb5\x29"
+	# UID data - BID
+	advdata(23:6) = "\x42\x03\x51\xe8\x56\x28"
+	# UID data - RFU
+	advdata(29:2) = $0000
+
+	# advertise interval (100ms)
+	call gap_set_adv_parameters(160, 160, 7)
+	
+	# gap settings
+	call gap_set_mode(gap_user_data, gap_non_connectable)
+	
+	# execute advertise
+	call gap_set_adv_data(0, 31, advdata(0:30))
+	
+end
+
+event system_boot(major, minor, patch, build, ll_version, protocol_version, hw)
+	call init_adv_data()
+end
