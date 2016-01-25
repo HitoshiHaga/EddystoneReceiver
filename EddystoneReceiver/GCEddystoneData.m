@@ -10,7 +10,7 @@
 
 typedef struct __attribute__((packed)) {
     u_int8_t frameType;
-    u_int8_t txPower;
+    int8_t txPower;
     u_int8_t nid[10];
     u_int8_t bid[6];
     u_int8_t rfu[2];
